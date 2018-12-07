@@ -1,0 +1,19 @@
+digraph "CFG for '_Z5_mainil' function" {
+	label="CFG for '_Z5_mainil' function";
+
+	Node0x555f749df3b0 [shape=record,label="{%2:\l  %3 = alloca i32, align 4\l  %4 = alloca i64, align 8\l  %5 = alloca i32, align 4\l  %6 = alloca i32, align 4\l  %7 = alloca i32, align 4\l  %8 = alloca i64, align 8\l  store i32 %0, i32* %3, align 4\l  store i64 %1, i64* %4, align 8\l  store i32 0, i32* %5, align 4\l  store i32 0, i32* %6, align 4\l  br label %9\l}"];
+	Node0x555f749df3b0 -> Node0x555f749ffa30;
+	Node0x555f749ffa30 [shape=record,label="{%9:\l\l  %10 = load i32, i32* %6, align 4\l  %11 = icmp slt i32 %10, 5\l  br i1 %11, label %12, label %18\l|{<s0>T|<s1>F}}"];
+	Node0x555f749ffa30:s0 -> Node0x555f74a00090;
+	Node0x555f749ffa30:s1 -> Node0x555f74a00120;
+	Node0x555f74a00090 [shape=record,label="{%12:\l\l  %13 = load i32, i32* %6, align 4\l  %14 = load i32, i32* %5, align 4\l  %15 = add nsw i32 %13, %14\l  store i32 %15, i32* %5, align 4\l  %16 = load i32, i32* %6, align 4\l  %17 = add nsw i32 %16, 1\l  store i32 %17, i32* %6, align 4\l  br label %9\l}"];
+	Node0x555f74a00090 -> Node0x555f749ffa30;
+	Node0x555f74a00120 [shape=record,label="{%18:\l\l  store i32 0, i32* %7, align 4\l  br label %19\l}"];
+	Node0x555f74a00120 -> Node0x555f74a00640;
+	Node0x555f74a00640 [shape=record,label="{%19:\l\l  %20 = load i32, i32* %7, align 4\l  %21 = icmp slt i32 %20, 5\l  br i1 %21, label %22, label %25\l|{<s0>T|<s1>F}}"];
+	Node0x555f74a00640:s0 -> Node0x555f74a007d0;
+	Node0x555f74a00640:s1 -> Node0x555f74a00820;
+	Node0x555f74a007d0 [shape=record,label="{%22:\l\l  %23 = load i32, i32* %7, align 4\l  %24 = add nsw i32 %23, 1\l  store i32 %24, i32* %7, align 4\l  br label %19\l}"];
+	Node0x555f74a007d0 -> Node0x555f74a00640;
+	Node0x555f74a00820 [shape=record,label="{%25:\l\l  %26 = load i32, i32* %5, align 4\l  %27 = bitcast i64* %8 to i32*\l  store i32 %26, i32* %27, align 8\l  %28 = ptrtoint i64* %8 to i64\l  %29 = add nsw i64 %28, 4\l  %30 = inttoptr i64 %29 to i32*\l  store i32 0, i32* %30, align 4\l  %31 = load i64, i64* %8, align 8\l  ret i64 %31\l}"];
+}

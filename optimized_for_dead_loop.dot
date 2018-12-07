@@ -1,0 +1,5 @@
+digraph "CFG for '_Z5_mainil' function" {
+	label="CFG for '_Z5_mainil' function";
+
+	Node0x55b8856a2fb0 [shape=record,label="{%2:\l  %3 = alloca i64, align 8\l  %4 = bitcast i64* %3 to i8*\l  call void @llvm.lifetime.start(i64 8, i8* nonnull %4) #2\l  %5 = bitcast i64* %3 to i32*\l  store i32 10, i32* %5, align 8, !tbaa !1\l  %6 = ptrtoint i64* %3 to i64\l  %7 = or i64 %6, 4\l  %8 = inttoptr i64 %7 to i32*\l  store i32 0, i32* %8, align 4, !tbaa !1\l  %9 = load i64, i64* %3, align 8, !tbaa !5\l  call void @llvm.lifetime.end(i64 8, i8* nonnull %4) #2\l  ret i64 %9\l}"];
+}
