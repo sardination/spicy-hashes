@@ -28,6 +28,6 @@
         for example
 * Used `gcc forkbomb_v5.s -o forkbomb_v5` to assemble modified binary
 
-
-
-* TODO: benign programs that look similar to the malware
+# benign
+* Simple `hello world` looping program with a similar control flow to the forkbomb
+* Tests our syscall heuristic
