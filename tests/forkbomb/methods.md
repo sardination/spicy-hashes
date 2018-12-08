@@ -14,15 +14,19 @@
 * Same as v3 but now with nops everywhere
 
 # forkbomb_v5
-* Took forkbomb_v4 binary and disassembled it
+* Copied forkbomb_v4 code and assembled it ( gcc -O0 -S -c forkbomb_v5.c)
 * Modified new assembly code:
-    * Instruction substitution: Replacing instructions with other equivalent
-        instructions. e.g.
+    * Instruction substitution: Replacing instructions with other equivalent instructions. e.g.
         ```
-         100000fa3:	83 c0 01 	addl	$1, %eax
-         100000fa3:	83 c0 01 	subl	$-1, %eax
+        addl	$1, %eax
+        subl	$-1, %eax
         ```
-* Used `as` to re-assemble newly modified binary
+    * Unnecssary instruction insertion. Extra copies of:
+        ```
+        movq	%rsp, %rbp
+        ```
+        for example
+* Used `gcc forkbomb_v5.s -o forkbomb_v5` to assemble modified binary
 
 
 
