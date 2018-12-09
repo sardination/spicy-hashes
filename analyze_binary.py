@@ -92,6 +92,11 @@ def create_graph(binary):
         radare_pipe = r2pipe.open(binary)
         radare_pipe.cmd('aaaaa')
         dotContents = radare_pipe.cmd('agfd')
+        dot_path = Path(dirname) / f'{binary}.dot'
+        with (dot_path).open(mode='w+') as f:
+            f.write(dotContents)
+        subprocess.run(f'dot -Tpng {dot_path} -o {binary}.png',
+                       shell=True, check=True)
 
     graph = from_agraph(pygraphviz.AGraph(dotContents))
 
