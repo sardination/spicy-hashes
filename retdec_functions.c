@@ -4,3 +4,7 @@
 void __asm_hlt(){
     asm("hlt");
 }
+
+int __readgsdword(int x) {
+    return 0;
+}
