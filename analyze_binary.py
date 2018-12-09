@@ -84,6 +84,7 @@ def create_graph(binary):
             nodename is a string
             node values include 'label' (assembly instructions) and 'shape' = 'record'
     """
+    og_name = binary
     with tempfile.TemporaryDirectory() as dirname:
         # get a new binary with dead code removed
         binary = strip_dead_code(binary, dirname)
@@ -96,7 +97,9 @@ def create_graph(binary):
         dot_path = Path(dirname) / f'{binary}.dot'
         with (dot_path).open(mode='w+') as f:
             f.write(dotContents)
-        subprocess.run(f'dot -Tpng {dot_path} -o {binary}.png',
+
+        png_path = f'~/graphs/{Path(og_name).name}.png'
+        subprocess.run(f'dot -Tpng {dot_path} -o {png_path}',
                        shell=True, check=True)
 
     graph = from_agraph(pygraphviz.AGraph(dotContents))
