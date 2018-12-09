@@ -91,6 +91,7 @@ def create_graph(binary):
         # run Radare2 on the binary to get dotfile contents
         radare_pipe = r2pipe.open(binary)
         radare_pipe.cmd('aaaaa')
+        radare_pipe.cmd('s main')
         dotContents = radare_pipe.cmd('agfd')
         dot_path = Path(dirname) / f'{binary}.dot'
         with (dot_path).open(mode='w+') as f:
