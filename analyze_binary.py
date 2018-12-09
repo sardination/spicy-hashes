@@ -57,7 +57,8 @@ def strip_dead_code(binary, dirname):
         with open('retdec_functions.c', 'r') as f:
             retdec_functions = f.read()
         src = ''.join((retdec_functions, src))
-        src_file.truncate(0)
+        src_file.seek(0)
+        src_file.truncate()
         src_file.write(src.lstrip())
 
     # debug
