@@ -66,7 +66,7 @@ def strip_dead_code(binary, dirname):
 
     # recompile a new binary with max optimization level to eliminate dead code
     stripped_path = Path(dirname) / 'stripped'
-    subprocess.run(f'gcc -m32 -fpermissive {src_path} -S -O3 -o {stripped_path}',
+    subprocess.run(f'gcc -m32 -fpermissive {src_path} -O3 -o {stripped_path}',
                    shell=True, check=True)
     return str(stripped_path)
 
