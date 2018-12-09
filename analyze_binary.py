@@ -105,33 +105,33 @@ def create_graph(binary):
     graph = from_agraph(pygraphviz.AGraph(dotContents))
 
     # add syscall nodes
-    for syscall_name in caught_syscalls:
-        node_name = 'syscall_{}'.format(syscall_name)
-        graph.add_node(
-            node_name,
-            label='syscall {}'.format(syscall_name),
-            shape='record'
-        )
+    #for syscall_name in caught_syscalls:
+    #    node_name = 'syscall_{}'.format(syscall_name)
+    #    graph.add_node(
+    #        node_name,
+    #        label='syscall {}'.format(syscall_name),
+    #        shape='record'
+    #    )
 
     # link syscall nodes to original nodes
-    for node_name, node_info in graph.nodes.items():
-        # skip over our added syscall nodes
-        if 'syscall_' in node_name:
-            continue
+    #for node_name, node_info in graph.nodes.items():
+    #    # skip over our added syscall nodes
+    #    if 'syscall_' in node_name:
+    #        continue
 
-        instructions = node_info.get('label')
+    #    instructions = node_info.get('label')
 
-        for syscall_name in caught_syscalls:
-            instr_regex = r"call\s.*sym.imp.{}".format(syscall_name)
+    #    for syscall_name in caught_syscalls:
+    #        instr_regex = r"call\s.*sym.imp.{}".format(syscall_name)
 
-            if re.search(instr_regex, instructions):
-                # connect the syscall node to this node
-                syscall_node_name = 'syscall_{}'.format(syscall_name)
-                graph.add_edge(
-                    syscall_node_name,
-                    node_name,
-                    weight=10
-                )
+    #        if re.search(instr_regex, instructions):
+    #            # connect the syscall node to this node
+    #            syscall_node_name = 'syscall_{}'.format(syscall_name)
+    #            graph.add_edge(
+    #                syscall_node_name,
+    #                node_name,
+    #                weight=10
+    #            )
 
     return graph
 
@@ -144,8 +144,9 @@ def node_match(graph1_node, graph2_node):
 
     Only matches syscall nodes to each other
     """
-    if 'syscall' not in graph1_node.get('label'):
-        return False
+    #if 'syscall' not in graph1_node.get('label'):
+    #    return False
+    return True
 
     return graph1_node.get('label') == graph2_node.get('label')
 
@@ -155,27 +156,28 @@ def edge_match(graph1_edge, graph2_edge):
     Return True if the two edges should be considered equivalent,
     otherwise return False
     """
-    pass
+    return True
 
 
 def node_del_cost(graph_node):
     """
     Return the cost of deleting a node from the graph
     """
-    return 0
+    return 1
 
 
 def node_ins_cost(graph_node):
     """
     Return the cost of inserting a node into the graph
     """
-    return 0
+    return 1
 
 
 def node_subst_cost(graph1_node, graph2_node):
     """
     Return the cost of substituting one node for another
     """
+    return 0
     return node_del_cost(graph1_node) + node_del_cost(graph2_node)
 
 
@@ -183,13 +185,14 @@ def edge_del_cost(graph_edge):
     """
     Return the cost of deleting an edge from the graph
     """
-    return 0
+    return 1
 
 
 def edge_ins_cost(graph_edge):
     """
     Return the cost of inserting an edge into a graph
     """
+    return 1
     return graph_edge.get('weight') if graph_edge.get('weight') else 1
 
 
@@ -197,6 +200,7 @@ def edge_subst_cost(graph1_edge, graph2_edge):
     """
     Return the cost of substituting one edge for another
     """
+    return 0
     return edge_del_cost(graph1_edge) + edge_ins_cost(graph2_edge)
 
 
@@ -208,15 +212,26 @@ def compare_graphs(old_graph, new_graph):
 
 
 def main(old_graph_path, new_graph_path):
+    old_graph = create_graph(old_graph_path)
+    new_graph = create_graph(new_graph_path)
+    print(list(old_graph.nodes))
+    print(list(old_graph.edges))
+    print(old_graph.number_of_edges())
+
+    print(list(new_graph.nodes))
+    print(list(new_graph.edges))
+    print(new_graph.number_of_edges())
+
+
     print(graph_edit_distance(
-        create_graph(old_graph_path),
-        create_graph(new_graph_path),
+        old_graph,
+        new_graph,
         node_match=node_match,
         edge_match=edge_match,
-        node_subst_cost=node_subst_cost,
+     #   node_subst_cost=node_subst_cost,
         node_del_cost=node_del_cost,
         node_ins_cost=node_ins_cost,
-        edge_subst_cost=edge_subst_cost,
+     #   edge_subst_cost=edge_subst_cost,
         edge_del_cost=edge_del_cost,
         edge_ins_cost=edge_ins_cost,
     ))
