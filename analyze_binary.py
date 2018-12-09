@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import networkx as nx
 from networkx.drawing.nx_agraph import (
     read_dot,
@@ -6,6 +8,7 @@ from networkx.drawing.nx_agraph import (
 from networkx.convert import to_dict_of_lists
 from networkx.algorithms.similarity import graph_edit_distance
 
+import argparse
 import pygraphviz
 import re
 import r2pipe
@@ -147,13 +150,10 @@ def compare_graphs(old_graph, new_graph):
     return 0
 
 
-def main():
-    old_graph = create_graph('tests/forkbomb/forkbomb_v1')
-    new_graph = create_graph('tests/forkbomb/forkbomb_v2')
-
+def main(old_graph_path, new_graph_path):
     print(graph_edit_distance(
-        old_graph,
-        new_graph,
+        create_graph(old_graph_path),
+        create_graph(new_graph_path),
         node_match=node_match,
         edge_match=edge_match,
         node_subst_cost=node_subst_cost,
@@ -166,5 +166,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-g', nargs=2, required=False,
+                        default=['tests/forkbomb/forkbomb_v1',
+                                 'tests/forkbomb/forkbomb_v2'])
 
+    args = parser.parse_args()
+    main(args.g[0], args.g[1])
