@@ -9,9 +9,16 @@ from networkx.convert import to_dict_of_lists
 from networkx.algorithms.similarity import graph_edit_distance
 
 import argparse
+from pathlib import Path
 import pygraphviz
 import re
 import r2pipe
+import subprocess
+import tempfile
+
+# retdec install directory path
+RETDEC_DIR = Path.home() / 'retdec-install'
+assert(RETDEC_DIR.exists())
 
 # read, write, chmod, pipe, socket, open, close, kill, fork
 caught_syscalls = [
@@ -26,6 +33,43 @@ caught_syscalls = [
     'fork'
 ]
 
+
+def strip_dead_code(binary, dirname):
+    """
+    Recompiles the binary with (hopefully) all dead code stripped out by clang's
+    optimization.
+
+    Args:
+        binary (string): file path for the binary
+        dirname (string): directory to work in
+
+    Returns:
+        path to new stripped binary as a string
+    """
+    # decompile binary using retdec
+    src_path = Path(dirname) / 'src.cpp'
+    decompile_cmd = f"python3 {RETDEC_DIR / 'bin/retdec-decompiler.py'} -l c {binary} -o {src_path}"
+    subprocess.run(decompile_cmd, shell=True, check=True)
+
+    # prepend decompiled source with contents of retdec_functions.c
+    with src_path.open(mode='r+') as src_file:
+        src = src_file.read()
+        with open('retdec_functions.c', 'r') as f:
+            retdec_functions = f.read()
+        src = ''.join((retdec_functions, src))
+        src_file.truncate(0)
+        src_file.write(src.lstrip())
+
+    # debug
+    subprocess.run(f'cat {src_path}', shell=True, check=True)
+
+    # recompile a new binary with max optimization level to eliminate dead code
+    stripped_path = Path(dirname) / 'stripped'
+    subprocess.run(f'gcc -m32 -fpermissive {src_path} -S -O3 -o {stripped_path}',
+                   shell=True, check=True)
+    return str(stripped_path)
+
+
 def create_graph(binary):
     """
     Adds syscall nodes into the graph generated from the passed in binary and then
@@ -39,11 +83,14 @@ def create_graph(binary):
             nodename is a string
             node values include 'label' (assembly instructions) and 'shape' = 'record'
     """
+    with tempfile.TemporaryDirectory() as dirname:
+        # get a new binary with dead code removed
+        binary = strip_dead_code(binary, dirname)
 
-    # run Radare2 on the binary to get dotfile contents
-    radare_pipe = r2pipe.open(binary)
-    radare_pipe.cmd('aaaaa')
-    dotContents = radare_pipe.cmd('agfd')
+        # run Radare2 on the binary to get dotfile contents
+        radare_pipe = r2pipe.open(binary)
+        radare_pipe.cmd('aaaaa')
+        dotContents = radare_pipe.cmd('agfd')
 
     graph = from_agraph(pygraphviz.AGraph(dotContents))
 
