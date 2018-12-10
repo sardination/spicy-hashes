@@ -7,7 +7,6 @@
 # forkbomb_v3
 * Same as v2 but
 * Makes use of a bogus if statement to go to the fork code
->>>>>>> 2cd440b4e0f920a70baf9fd6ddf5818674a65bee
     * Adds a useless variable and for loop *after* the forkbomb loop to obfuscate
 * Also trying to use `__attribute__(used)` option
 
