@@ -3,6 +3,7 @@
 ## Installation
 
 * We require Python 3.7 or higher and gcc to be installed
+* We require `gcc-multilib` and `g++-multilib` to be installed
 * Run `pip install -r requirements.txt` to install all python library requirements
 * Install RetDec https://github.com/avast-tl/retdec
 * Install Radare2 https://github.com/radare/radare2
