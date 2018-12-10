@@ -223,30 +223,7 @@ def main(old_graph_path, new_graph_path):
     print(list(new_graph.edges))
     print(new_graph.number_of_edges())
 
-    gen = optimize_graph_edit_distance(
-        old_graph,
-        new_graph,
-        node_match=node_match,
-        edge_match=edge_match,
-     #   node_subst_cost=node_subst_cost,
-        node_del_cost=node_del_cost,
-        node_ins_cost=node_ins_cost,
-     #   edge_subst_cost=edge_subst_cost,
-        edge_del_cost=edge_del_cost,
-        edge_ins_cost=edge_ins_cost,
-        upper_bound=50
-    )
-
-    ged = None
-    try:
-        for _ in range(5): 
-            ged = next(gen)
-    except StopIteration:
-        pass
-        
-    print(ged)
-
-    #print(graph_edit_distance(
+    #gen = optimize_graph_edit_distance(
     #    old_graph,
     #    new_graph,
     #    node_match=node_match,
@@ -257,8 +234,31 @@ def main(old_graph_path, new_graph_path):
     # #   edge_subst_cost=edge_subst_cost,
     #    edge_del_cost=edge_del_cost,
     #    edge_ins_cost=edge_ins_cost,
-    #    upper_bound=100
-    #))
+    #    upper_bound=50
+    #)
+
+    #ged = None
+    #try:
+    #    for _ in range(5): 
+    #        ged = next(gen)
+    #except StopIteration:
+    #    pass
+    #    
+    #print(ged)
+
+    print(graph_edit_distance(
+        old_graph,
+        new_graph,
+        node_match=node_match,
+        edge_match=edge_match,
+     #   node_subst_cost=node_subst_cost,
+        node_del_cost=node_del_cost,
+        node_ins_cost=node_ins_cost,
+     #   edge_subst_cost=edge_subst_cost,
+        edge_del_cost=edge_del_cost,
+        edge_ins_cost=edge_ins_cost,
+        upper_bound=100
+    ))
 
 
 if __name__ == "__main__":
