@@ -147,7 +147,7 @@ def node_match(graph1_node, graph2_node):
     """
     #if 'syscall' not in graph1_node.get('label'):
     #    return False
-    return True
+    #return True
 
     return graph1_node.get('label') == graph2_node.get('label')
 
